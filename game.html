@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>脊梁 · 猜一猜｜群星脊梁博物馆</title>
+<style>
+  :root{
+    --paper:#EFE9DA;--paper-deep:#E4DCC6;--ink:#2E2921;--ink-soft:#6C6453;
+    --cinnabar:#B23A2E;--gold:#A98A4B;
+    --serif:"Songti SC","STSong","Noto Serif SC",SimSun,serif;
+    --kai:"Kaiti SC","KaiTi","FangSong",serif;
+    --sans:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--paper);
+    background-image:radial-gradient(120% 90% at 50% -10%,rgba(255,255,255,.55),transparent 60%),radial-gradient(var(--paper-deep) 1px,transparent 1px);
+    background-size:100% 100%,28px 28px;
+    color:var(--ink);font-family:var(--sans);line-height:1.8;min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+  .topbar{border-bottom:1px solid rgba(46,41,33,.14);padding:13px 0}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between}
+  .topbar a{text-decoration:none;color:var(--ink-soft);font-family:var(--kai);font-size:13px;letter-spacing:1px}
+  .topbar a:hover{color:var(--cinnabar)}
+  .topbar .brand{display:flex;align-items:center;gap:10px}
+  .topbar .seal{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(178,58,46,.3))}
+  .topbar b{font-family:var(--serif);font-size:14px;letter-spacing:2px}
+
+  header{text-align:center;padding:38px 0 8px}
+  header h1{font-family:var(--serif);font-size:clamp(28px,6vw,42px);letter-spacing:4px}
+  header .sub{font-family:var(--kai);font-size:15px;color:var(--ink-soft);letter-spacing:2px;margin-top:8px}
+
+  .hud{display:flex;align-items:center;justify-content:center;gap:24px;margin:24px 0 6px;flex-wrap:wrap}
+  .hud .stat{text-align:center}
+  .hud .num{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--cinnabar)}
+  .hud .lbl{font-family:var(--kai);font-size:12px;color:var(--ink-soft);letter-spacing:2px}
+  .hud .progress{flex:1;min-width:120px;max-width:240px;height:8px;background:rgba(46,41,33,.1);border-radius:99px;overflow:hidden}
+  .hud .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--cinnabar));border-radius:99px;transition:width .4s ease}
+
+  /* 计时条 */
+  .timer{display:flex;align-items:center;gap:10px;margin:14px 0 0}
+  .timer .t-bar{flex:1;height:6px;background:rgba(46,41,33,.08);border-radius:99px;overflow:hidden}
+  .timer .t-bar i{display:block;height:100%;background:var(--cinnabar);border-radius:99px;width:100%;transition:width .1s linear}
+  .timer .t-num{font-family:var(--serif);font-size:16px;color:var(--cinnabar);min-width:34px;text-align:right}
+  .timer .t-bar i.warn{background:#D9772E}
+
+  .card{background:#FBF7EC;border:1px solid rgba(46,41,33,.12);border-radius:16px;box-shadow:0 8px 26px rgba(46,41,33,.12);padding:30px 28px;margin-top:18px}
+  .q-type{font-family:var(--kai);font-size:13px;color:var(--cinnabar);letter-spacing:3px;margin-bottom:12px}
+  .q-clue{font-family:var(--kai);font-size:clamp(17px,3.4vw,21px);line-height:2.05;letter-spacing:1px;color:var(--ink)}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  .opt{
+    cursor:pointer;font-family:var(--serif);font-size:17px;letter-spacing:2px;color:var(--ink);
+    background:#fff;border:2px solid rgba(46,41,33,.16);border-radius:11px;padding:15px 12px;text-align:center;
+    transition:all .18s ease;position:relative;
+  }
+  .opt:hover{border-color:var(--cinnabar);color:var(--cinnabar);transform:translateY(-2px)}
+  .opt.correct{background:#4C7A52;border-color:#4C7A52;color:#fff;animation:pop .35s ease}
+  .opt.wrong{background:var(--cinnabar);border-color:var(--cinnabar);color:#fff}
+  .opt.disabled{pointer-events:none;opacity:.55}
+  @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+  /* 答对显示照片 */
+  .answer{display:none;margin-top:20px;gap:16px;align-items:center;background:rgba(46,41,33,.04);border-radius:12px;padding:16px}
+  .answer.show{display:flex}
+  .answer .a-img{width:76px;height:94px;object-fit:cover;border-radius:9px;border:2px solid var(--cinnabar);flex:0 0 76px;background:linear-gradient(135deg,#D9A441,#8C6A3F)}
+  .answer .a-txt{font-family:var(--kai);font-size:15px;letter-spacing:1px;color:var(--ink);line-height:1.9}
+  .answer .a-txt b{color:var(--cinnabar)}
+  .next{display:none;margin:20px auto 0;border:none;background:var(--cinnabar);color:#fff;font-family:var(--kai);font-size:15px;letter-spacing:3px;padding:11px 34px;border-radius:10px;cursor:pointer;box-shadow:0 6px 16px rgba(178,58,46,.3)}
+  .next:hover{transform:translateY(-2px)}
+
+  .start{text-align:center;padding:30px 26px}
+  .start .big{font-size:52px}
+  .start p{font-family:var(--kai);font-size:16px;color:var(--ink-soft);line-height:2.05;margin:14px 0 22px;letter-spacing:1px}
+  .start-btn{border:none;background:var(--cinnabar);color:#fff;font-family:var(--kai);font-size:17px;letter-spacing:4px;padding:13px 44px;border-radius:12px;cursor:pointer;box-shadow:0 8px 20px rgba(178,58,46,.34);transition:transform .2s}
+  .start-btn:hover{transform:translateY(-3px)}
+
+  .result{text-align:center}
+  .result .score{font-family:var(--serif);font-size:64px;font-weight:700;color:var(--cinnabar);line-height:1}
+  .result .rate{font-family:var(--kai);font-size:18px;color:var(--ink);margin-top:10px;letter-spacing:2px}
+  .result p{font-family:var(--kai);font-size:15px;color:var(--ink-soft);margin:16px 0 24px;letter-spacing:1px}
+  .result .btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{border:2px solid var(--cinnabar);background:transparent;color:var(--cinnabar);font-family:var(--kai);font-size:15px;letter-spacing:2px;padding:10px 24px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .2s}
+  .btn.solid{background:var(--cinnabar);color:#fff}
+  .btn:hover{transform:translateY(-2px)}
+
+  footer{text-align:center;padding:30px 0 44px;margin-top:30px}
+  footer p{font-family:var(--kai);font-size:13px;color:var(--ink-soft);letter-spacing:2px}
+
+  @media (max-width:520px){.options{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <a href="index.html">← 返回博物馆大厅</a>
+      <div class="brand"><img class="seal" src="images/seal.png" alt="馆印"><b>群星脊梁博物馆</b></div>
+    </div>
+  </div>
+
+  <header class="wrap">
+    <h1>脊梁 · 猜一猜</h1>
+    <div class="sub">三十位脊梁，三种题型，你能认出几位？</div>
+  </header>
+
+  <main class="wrap">
+
+    <div class="card start" id="start">
+      <div class="big">🎮</div>
+      <p>这里有三十位照亮时代的脊梁。<br>三种题型：看身份、看名言、看高光。<br>每题限时 20 秒，共十题。</p>
+      <button class="start-btn" id="start-btn">开始挑战</button>
+    </div>
+
+    <div id="quiz" hidden>
+      <div class="hud">
+        <div class="stat"><div class="num" id="score">0</div><div class="lbl">得分</div></div>
+        <div class="stat"><div class="num" id="round">1</div><div class="lbl">题号</div></div>
+        <div class="stat"><div class="num" id="streak">0</div><div class="lbl">连对</div></div>
+      </div>
+      <div class="timer"><span class="lbl" style="font-family:var(--kai);font-size:12px;color:var(--ink-soft);letter-spacing:2px">倒计时</span><div class="t-bar"><i id="tbar"></i></div><span class="t-num" id="tnum">20</span></div>
+
+      <div class="card">
+        <div class="q-type" id="qtype"></div>
+        <p class="q-clue" id="clue"></p>
+        <div class="options" id="options"></div>
+        <div class="answer" id="answer">
+          <img class="a-img" id="a-img" alt="">
+          <div class="a-txt" id="feedback"></div>
+        </div>
+        <button class="next" id="next">下一题 →</button>
+      </div>
+    </div>
+
+    <div class="card result" id="result" hidden>
+      <div class="q-type">挑战结束</div>
+      <div class="score" id="final-score">0</div>
+      <div class="rate" id="rate"></div>
+      <p id="comment"></p>
+      <div class="btn-row">
+        <button class="btn solid" id="again">再来一局</button>
+        <a class="btn" href="index.html">回到博物馆</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>策展小组：Daniel · Rummy · Bohan · Steven</p>
+  </footer>
+
+  <script>
+    var DATA = [
+      {n:"袁隆平",c:"#C89B3C",img:"images/portrait-00.jpg",clue:"他让亿万人的饭碗盛满稻香，毕生追求是让所有人远离饥饿，还有一个“禾下乘凉”的梦。",quote:"我毕生的追求就是让所有人远离饥饿。",hl:"挽起裤腿赤脚下田，一株一株寻觅杂交稻",fact:"杂交水稻之父"},
+      {n:"张秉贵",c:"#D9772E",img:"images/portrait-01.jpg",clue:"北京百货大楼的糖果售货员，练就“一把抓”“一口清”，一团火温暖众人心。",quote:"为人民服务，首先要对人民有感情。",hl:"抓糖一把准，算账一口清，温暖众人心",fact:"“一团火”精神的化身"},
+      {n:"钟扬",c:"#4A6FA5",img:null,clue:"援藏十六年的植物学家，为未来存下四千万颗种子，把论文写在高原上。",quote:"一个基因可以拯救一个国家，一粒种子可以造福万千苍生。",hl:"珠峰北坡 6200 米，采集海拔最高的种子",fact:"种子精神的追梦人"},
+      {n:"高凤林",c:"#3E5C76",img:null,clue:"火箭发动机焊接大师，0.08 毫米的精度，被称为“焊接火箭心脏的人”。",quote:"焊缝就是火箭的生命线，容不得一丝瑕疵。",hl:"0.08 毫米精度，焊接火箭发动机喷管",fact:"大国工匠"},
+      {n:"钱学森",c:"#2E4A6B",img:"images/portrait-04.jpg",clue:"中国航天之父，五年归国路、十年两弹成，让中国人叩问苍穹。",quote:"科学无国界，科学家有祖国。",hl:"被软禁五年仍坚持回国，主持研制导弹",fact:"科学无国界，科学家有祖国"},
+      {n:"邓稼先",c:"#B57A3A",img:"images/portrait-05.jpg",clue:"隐姓埋名二十八载的两弹元勋，把姓名都交给了祖国。",quote:"假如能够再活一次，我仍选择中国。",hl:"隐姓埋名二十八载，罗布泊一声惊雷",fact:"假如能够再活一次，我仍选择中国"},
+      {n:"屠呦呦",c:"#5E8C5A",img:"images/portrait-06.jpg",clue:"从古籍里找到青蒿素，中国第一位本土诺奖女科学家。",quote:"这不是我一个人的荣誉，是中国科学家集体的荣誉。",hl:"从古籍里悟出低温提取，青蒿素问世",fact:"一株青蒿济苍生"},
+      {n:"南仁东",c:"#33505A",img:null,clue:"为中国人造出“天眼”FAST 的总工程师，二十二年磨一镜。",quote:"人类之所以脱颖而出，就是因为对宇宙有好奇。",hl:"走遍贵州上百洼地，造出天眼 FAST",fact:"仰望星空的人"},
+      {n:"华罗庚",c:"#3F6E8E",img:"images/portrait-08.jpg",clue:"初中毕业却自学成才的数学大师，倒在讲台上工作到最后一刻。",quote:"聪明在于勤奋，天才在于积累。",hl:"初中辍学，靠自学成为数学大师",fact:"聪明在于勤奋"},
+      {n:"李四光",c:"#A98A4B",img:"images/portrait-09.jpg",clue:"地质学家，用地质力学为中国找到大油田，推翻“贫油论”。",quote:"中国的地下有石油，我们要把它找出来。",hl:"用地质力学推翻贫油论，找到大油田",fact:"把论文写在祖国大地"},
+      {n:"茅以升",c:"#4A6B82",img:"images/portrait-10.jpg",clue:"钱塘江大桥的建造者，也曾亲手炸掉自己的桥，立誓“不复原桥不丈夫”。",quote:"不复原桥不丈夫。",hl:"主持建造钱塘江大桥，又亲手炸掉它",fact:"中国桥梁之父"},
+      {n:"于敏",c:"#6E5B3A",img:"images/portrait-11.jpg",clue:"从一张白纸算出国之重器的“氢弹之父”，长期隐姓埋名。",quote:"核武器不是用来打仗的，是用来保卫和平的。",hl:"从一张白纸算起，造出氢弹",fact:"国之重器，不彰自威"},
+      {n:"孙家栋",c:"#4A90A5",img:"images/portrait-12.jpg",clue:"卫星总师，让北斗照亮苍穹，一生主持研制四十五颗卫星。",quote:"中国人的导航，必须掌握在中国人手里。",hl:"主持研制东方红一号，北斗组网全球",fact:"中国人的导航自己做主"},
+      {n:"王进喜",c:"#A8743A",img:"images/portrait-13.jpg",clue:"大庆“铁人”，井喷时纵身跳进泥浆池，用身体搅拌泥浆。",quote:"宁肯少活二十年，拼命也要拿下大油田。",hl:"井喷时纵身跳进泥浆池，用身体搅拌",fact:"宁肯少活二十年"},
+      {n:"时传祥",c:"#5C7A4A",img:"images/portrait-14.jpg",clue:"掏粪工人，“宁肯一人脏，换来万家净”的全国劳模。",quote:"宁肯一人脏，换来万家净。",hl:"一根扁担掏净城市，宁肯一人脏",fact:"劳动光荣"},
+      {n:"许振超",c:"#3E6E8E",img:null,clue:"码头桥吊司机，创下“振超效率”，证明工人也能当专家。",quote:"工人也可以当专家。",hl:"创每小时吊装世界纪录，振超效率",fact:"中国效率"},
+      {n:"焦裕禄",c:"#4C7A52",img:"images/portrait-16.jpg",clue:"兰考县委书记，带病治理“三害”，种下的泡桐被称为“焦桐”。",quote:"活着我没治好沙丘，死了也要看着你们把沙丘治好。",hl:"带病治沙治水，用钢笔顶住肝痛",fact:"生也沙丘，死也沙丘"},
+      {n:"雷锋",c:"#4C6E3A",img:"images/portrait-17.jpg",clue:"共产主义战士，“螺丝钉精神”的代名词，做好事不留名。",quote:"把有限的生命，投入到无限的为人民服务之中去。",hl:"日记里写下，把有限生命投入无限服务",fact:"把有限的生命投入无限为人民服务"},
+      {n:"张桂梅",c:"#B54A5E",img:"images/portrait-18.jpg",clue:"创办免费女子高中，拖着病体把一千八百多名女孩送出大山的“燃灯校长”。",quote:"我生来就是高山而非溪流。",hl:"拖着病体翻山家访，创办免费女高",fact:"我生来就是高山"},
+      {n:"黄文秀",c:"#C0603A",img:"images/portrait-19.jpg",clue:"驻村第一书记，研究生毕业回到大山，把青春永远留在扶贫路上。",quote:"我是从大山里走出来的，应该回到大山里去。",hl:"暴雨夜赶回百坭村，生命停在扶贫路上",fact:"青春之花绽放在祖国最需要的地方"},
+      {n:"黄大年",c:"#3A5A8A",img:"images/portrait-20.jpg",clue:"地球物理学家，放弃海外回国，让中国深地探测站上世界前列。",quote:"振兴中华，乃我辈之责。",hl:"放弃海外回国，与时间赛跑攻关深地探测",fact:"心有大我，至诚报国"},
+      {n:"申纪兰",c:"#9E4A3A",img:"images/portrait-21.jpg",clue:"全国劳模，推动“男女同工同酬”写进宪法。",quote:"我是农民，我就为农民说话。",hl:"推动男女同工同酬写进宪法",fact:"人民代表为人民"},
+      {n:"王继才",c:"#4A7A8A",img:null,clue:"守岛卫士，在一座孤岛上守了三十二年，每天升起国旗。",quote:"守岛就是守国，有我在，岛就在。",hl:"孤岛上守了 32 年，每天升旗",fact:"守岛就是守国"},
+      {n:"鲁迅",c:"#4A4438",img:"images/portrait-23.jpg",clue:"以笔为枪的民族魂，写下“横眉冷对千夫指，俯首甘为孺子牛”。",quote:"横眉冷对千夫指，俯首甘为孺子牛。",hl:"弃医从文，以笔为枪唤醒国人",fact:"中国现代文学的奠基人"},
+      {n:"闻一多",c:"#8C3A3A",img:"images/portrait-24.jpg",clue:"“红烛”诗人，发表《最后一次讲演》拍案而起，为正义献身。",quote:"红烛啊，莫问收获，但问耕耘。",hl:"最后一次讲演拍案而起，当晚遇难",fact:"莫问收获，但问耕耘"},
+      {n:"朱自清",c:"#4C8C6E",img:"images/portrait-25.jpg",clue:"写下《背影》的散文家，宁可饿死也不领美国救济粮。",quote:"宁可饿死，也不领美国的救济粮。",hl:"贫病中拒绝美国救济粮，宁死不食",fact:"文人气节"},
+      {n:"老舍",c:"#5A5A6E",img:"images/portrait-26.jpg",clue:"“人民艺术家”，《骆驼祥子》《茶馆》写尽北平的人间烟火。",quote:"我是用我的生命，写我的人民。",hl:"一间茶馆，装下半世纪的沧桑",fact:"为最普通的人立传"},
+      {n:"吴孟超",c:"#B08C3A",img:"images/portrait-27.jpg",clue:"“中国肝胆外科之父”，眼里看的是病，心里装的是人，主刀一万六千例。",quote:"一个好医生，眼里看的是病，心里装的是人。",hl:"96 岁仍站手术台，主刀一万六千例",fact:"医者仁心"},
+      {n:"林巧稚",c:"#B56A7E",img:"images/portrait-28.jpg",clue:"妇产科专家，一生迎接五万多个新生命，被誉为“万婴之母”。",quote:"我是一辈子的值班医生。",hl:"一生未婚，迎接五万多个新生命",fact:"我把天下的孩子都当成自己的孩子"},
+      {n:"詹天佑",c:"#4C7A6E",img:"images/portrait-29.jpg",clue:"铁路工程师，用人字形铁路征服天险，让京张铁路震惊中外。",quote:"各出所学，各尽所知，使国家富强。",hl:"人字形铁路，征服八达岭天险",fact:"中国人能修，而且要修得更好"}
+    ];
+
+    var TOTAL = 10, SECONDS = 20;
+    var questions = [], idx = 0, score = 0, streak = 0, best = 0, timer = null, timeLeft = 0, answered = false;
+
+    function shuffle(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+    var TYPES = [
+      {label:"看身份 · 他是谁？", get:function(d){return d.clue;}},
+      {label:"看名言 · 谁说过这句话？", get:function(d){return '“' + d.quote + '”';}},
+      {label:"看高光 · 这属于谁？", get:function(d){return d.hl;}}
+    ];
+
+    function startGame(){
+      questions = shuffle(DATA.slice()).slice(0, TOTAL);
+      idx = 0; score = 0; streak = 0; best = 0;
+      document.getElementById('start').hidden = true;
+      document.getElementById('result').hidden = true;
+      document.getElementById('quiz').hidden = false;
+      showQuestion();
+    }
+
+    function showQuestion(){
+      answered = false;
+      var q = questions[idx];
+      var type = TYPES[Math.floor(Math.random()*TYPES.length)];
+      document.getElementById('round').textContent = (idx+1) + '/' + TOTAL;
+      document.getElementById('qtype').textContent = type.label;
+      document.getElementById('clue').textContent = type.get(q);
+      document.getElementById('answer').classList.remove('show');
+      document.getElementById('next').style.display = 'none';
+      var opts = shuffle(DATA.filter(function(d){return d.n!==q.n;})).slice(0,3).concat([q]);
+      opts = shuffle(opts);
+      var box = document.getElementById('options');
+      box.innerHTML = '';
+      opts.forEach(function(o){
+        var b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = o.n;
+        b.onclick = function(){ answer(o, q, b); };
+        box.appendChild(b);
+      });
+      startTimer();
+    }
+
+    function startTimer(){
+      timeLeft = SECONDS;
+      updateTimer();
+      clearInterval(timer);
+      timer = setInterval(function(){
+        timeLeft -= 0.1;
+        if(timeLeft <= 0){ timeLeft = 0; clearInterval(timer); timeout(); }
+        updateTimer();
+      }, 100);
+    }
+    function updateTimer(){
+      var bar = document.getElementById('tbar');
+      var num = document.getElementById('tnum');
+      num.textContent = Math.ceil(timeLeft);
+      var pct = Math.max(0, timeLeft / SECONDS * 100);
+      bar.style.width = pct + '%';
+      bar.className = timeLeft <= 5 ? 'warn' : '';
+    }
+
+    function reveal(q, pick, correct){
+      clearInterval(timer);
+      answered = true;
+      document.querySelectorAll('.opt').forEach(function(b){
+        b.classList.add('disabled');
+        if(b.textContent === q.n) b.classList.add('correct');
+      });
+      if(pick && !correct) pick.classList.add('wrong');
+      // 显示照片
+      var img = document.getElementById('a-img');
+      if(q.img){ img.src = q.img; img.style.display = 'block'; }
+      else { img.removeAttribute('src'); img.style.display = 'none'; }
+      var fb = document.getElementById('feedback');
+      if(correct){ fb.innerHTML = '✓ 答对了！<b>' + q.n + '</b> —— ' + q.fact; }
+      else if(pick){ fb.innerHTML = '✗ 是<b>' + q.n + '</b>，而不是' + pick.textContent + '。' + q.n + '：' + q.fact; }
+      else { fb.innerHTML = '⏱ 时间到！是<b>' + q.n + '</b>。' + q.n + '：' + q.fact; }
+      document.getElementById('answer').classList.add('show');
+      document.getElementById('next').style.display = 'block';
+      document.getElementById('score').textContent = score;
+      document.getElementById('streak').textContent = streak;
+    }
+
+    function answer(pick, q, btnEl){
+      if(answered) return;
+      var correct = pick.n === q.n;
+      if(correct){ score++; streak++; if(streak>best) best=streak; }
+      else streak = 0;
+      reveal(q, btnEl, correct);
+    }
+    function timeout(){
+      if(answered) return;
+      reveal(q_cur(), null, false);
+    }
+    function q_cur(){ return questions[idx]; }
+
+    function next(){
+      idx++;
+      if(idx >= TOTAL){ endGame(); return; }
+      showQuestion();
+    }
+
+    function endGame(){
+      document.getElementById('quiz').hidden = true;
+      var r = document.getElementById('result');
+      r.hidden = false;
+      document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+      var rate, comment;
+      if(score >= 9){ rate = '🌟 脊梁知己'; comment = '你对这些时代脊梁了如指掌，堪称知己！'; }
+      else if(score >= 7){ rate = '👍 心领神会'; comment = '你已经很懂他们了，再去展厅里走走吧。'; }
+      else if(score >= 5){ rate = '📖 渐入佳境'; comment = '有点感觉了，回博物馆补补课再来！'; }
+      else { rate = '🌱 初来乍到'; comment = '没关系，正是认识他们的开始，去展厅看看吧。'; }
+      document.getElementById('rate').textContent = rate;
+      document.getElementById('comment').textContent = comment;
+    }
+
+    document.getElementById('start-btn').onclick = startGame;
+    document.getElementById('next').onclick = next;
+    document.getElementById('again').onclick = startGame;
+  </script>
+
+</body>
+</html>

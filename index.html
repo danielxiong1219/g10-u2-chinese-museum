@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>群星脊梁博物馆 · 3D 展厅</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#1a1512;font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif}
+  #stage{position:fixed;inset:0}
+  #stage canvas{display:block}
+
+  .overlay{position:fixed;inset:0;pointer-events:none;z-index:10}
+  .overlay *{pointer-events:auto}
+
+  /* 标题 */
+  .brand{position:absolute;top:20px;left:22px;display:flex;align-items:center;gap:12px}
+  .brand img{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+  .brand .t{color:#F7F2E7;font-family:"Songti SC","STSong",serif;font-size:22px;letter-spacing:4px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+  .brand .s{display:block;color:#CFC6B0;font-family:"Kaiti SC","KaiTi",serif;font-size:12px;letter-spacing:2px;margin-top:2px}
+
+  /* 右上按钮 */
+  .top-actions{position:absolute;top:20px;right:20px;display:flex;gap:10px}
+  .btn{border:1px solid rgba(247,242,231,.4);background:rgba(20,16,13,.55);color:#F7F2E7;font-family:"Kaiti SC","KaiTi",serif;font-size:14px;letter-spacing:2px;padding:8px 16px;border-radius:8px;cursor:pointer;backdrop-filter:blur(4px);transition:all .2s}
+  .btn:hover{background:rgba(178,58,46,.8);border-color:#B23A2E}
+  .btn.on{background:rgba(178,58,46,.9);border-color:#B23A2E}
+
+  /* 推门进入 */
+  .door-card{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);text-align:center;background:rgba(20,16,13,.72);border:1px solid rgba(247,242,231,.25);border-radius:16px;padding:28px 40px;backdrop-filter:blur(6px);transition:opacity .6s,transform .6s}
+  .door-card .hall{color:#E8C77F;font-family:"Kaiti SC","KaiTi",serif;font-size:14px;letter-spacing:6px;margin-bottom:8px}
+  .door-card h1{color:#F7F2E7;font-family:"Songti SC","STSong",serif;font-size:clamp(26px,5vw,40px);letter-spacing:4px;margin-bottom:14px}
+  .door-btn{border:none;background:linear-gradient(135deg,#B23A2E,#8C2B22);color:#fff;font-family:"Kaiti SC","KaiTi",serif;font-size:18px;letter-spacing:6px;padding:15px 40px;border-radius:12px;cursor:pointer;box-shadow:0 8px 24px rgba(178,58,46,.45);transition:transform .2s}
+  .door-btn:hover{transform:translateY(-3px) scale(1.03)}
+  .door-card.hide{opacity:0;transform:translateX(-50%) translateY(30px);pointer-events:none}
+
+  /* 操作提示 */
+  .hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#CFC6B0;font-family:"Kaiti SC","KaiTi",serif;font-size:13px;letter-spacing:2px;background:rgba(20,16,13,.5);padding:8px 18px;border-radius:99px;backdrop-filter:blur(4px)}
+
+  /* 名录面板 */
+  .roster{position:absolute;top:0;right:0;bottom:0;width:280px;max-width:80vw;background:rgba(20,16,13,.9);backdrop-filter:blur(8px);transform:translateX(100%);transition:transform .35s ease;padding:24px 20px;overflow-y:auto;border-left:1px solid rgba(247,242,231,.15)}
+  .roster.open{transform:translateX(0)}
+  .roster h3{color:#E8C77F;font-family:"Songti SC","STSong",serif;font-size:18px;letter-spacing:3px;margin-bottom:14px}
+  .roster .r-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#CFC6B0;font-size:20px;cursor:pointer}
+  .roster .r-grid{display:grid;grid-template-columns:1fr;gap:6px}
+  .roster a{display:flex;align-items:center;gap:10px;color:#F7F2E7;text-decoration:none;font-family:"Kaiti SC","KaiTi",serif;font-size:15px;letter-spacing:2px;padding:8px 12px;border-radius:8px;transition:background .2s}
+  .roster a:hover{background:rgba(178,58,46,.5)}
+  .roster a i{width:10px;height:10px;border-radius:50%;flex:0 0 10px;box-shadow:0 0 6px currentColor}
+
+  @media (max-width:640px){
+    .brand .t{font-size:17px;letter-spacing:2px}
+    .door-card{padding:20px 26px;bottom:12%}
+    .top-actions .btn{padding:6px 12px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+  <div id="stage"></div>
+
+  <div class="overlay">
+    <div class="brand">
+      <img src="images/seal.png" alt="馆印">
+      <div><span class="t">群星脊梁博物馆</span><span class="s">虚拟 3D 展厅</span></div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="walk-btn">🚶 自动漫游</button>
+      <button class="btn" id="roster-btn">📋 名录</button>
+      <a class="btn" href="game.html" style="text-decoration:none">🎮 小游戏</a>
+    </div>
+
+    <div class="door-card" id="door-card">
+      <div class="hall">时代脊梁 · 群星谱</div>
+      <h1>群星脊梁博物馆</h1>
+      <button class="door-btn" id="door-btn">🚪 推门进入</button>
+    </div>
+
+    <div class="hint">拖拽转动视角 · W A S D / 方向键移动 · 点击人物进入展厅</div>
+
+    <div class="roster" id="roster">
+      <button class="r-close" id="r-close">✕</button>
+      <h3>人物名录</h3>
+      <div class="r-grid" id="r-grid"></div>
+    </div>
+  </div>
+
+  <script src="js/three.min.js"></script>
+  <script>
+  // —————— 数据（30 位人物，含肖像路径）——————
+  var EXHIBITS = [
+    {n:"袁隆平",hall:"稻浪厅",f:"袁隆平.html",c:0xC89B3C,img:"images/portrait-00.jpg"},
+    {n:"张秉贵",hall:"团火厅",f:"张秉贵.html",c:0xD9772E,img:"images/portrait-01.jpg"},
+    {n:"钟扬",hall:"探界厅",f:"钟扬.html",c:0x4A6FA5,img:null},
+    {n:"高凤林",hall:"匠心厅",f:"高凤林.html",c:0x3E5C76,img:null},
+    {n:"钱学森",hall:"铸剑厅",f:"钱学森.html",c:0x2E4A6B,img:"images/portrait-04.jpg"},
+    {n:"邓稼先",hall:"元勋厅",f:"邓稼先.html",c:0xB57A3A,img:"images/portrait-05.jpg"},
+    {n:"屠呦呦",hall:"青蒿厅",f:"屠呦呦.html",c:0x5E8C5A,img:"images/portrait-06.jpg"},
+    {n:"南仁东",hall:"天眼厅",f:"南仁东.html",c:0x33505A,img:null},
+    {n:"华罗庚",hall:"数魂厅",f:"华罗庚.html",c:0x3F6E8E,img:"images/portrait-08.jpg"},
+    {n:"李四光",hall:"寻矿厅",f:"李四光.html",c:0xA98A4B,img:"images/portrait-09.jpg"},
+    {n:"茅以升",hall:"架桥厅",f:"茅以升.html",c:0x4A6B82,img:"images/portrait-10.jpg"},
+    {n:"于敏",hall:"铸盾厅",f:"于敏.html",c:0x6E5B3A,img:"images/portrait-11.jpg"},
+    {n:"孙家栋",hall:"北斗厅",f:"孙家栋.html",c:0x4A90A5,img:"images/portrait-12.jpg"},
+    {n:"王进喜",hall:"铁人厅",f:"王进喜.html",c:0xA8743A,img:"images/portrait-13.jpg"},
+    {n:"时传祥",hall:"净城厅",f:"时传祥.html",c:0x5C7A4A,img:"images/portrait-14.jpg"},
+    {n:"许振超",hall:"振超厅",f:"许振超.html",c:0x3E6E8E,img:null},
+    {n:"焦裕禄",hall:"焦桐厅",f:"焦裕禄.html",c:0x4C7A52,img:"images/portrait-16.jpg"},
+    {n:"雷锋",hall:"雷锋精神厅",f:"雷锋.html",c:0x4C6E3A,img:"images/portrait-17.jpg"},
+    {n:"张桂梅",hall:"燃灯厅",f:"张桂梅.html",c:0xB54A5E,img:"images/portrait-18.jpg"},
+    {n:"黄文秀",hall:"青春厅",f:"黄文秀.html",c:0xC0603A,img:"images/portrait-19.jpg"},
+    {n:"黄大年",hall:"归国厅",f:"黄大年.html",c:0x3A5A8A,img:"images/portrait-20.jpg"},
+    {n:"申纪兰",hall:"纪兰厅",f:"申纪兰.html",c:0x9E4A3A,img:"images/portrait-21.jpg"},
+    {n:"王继才",hall:"守岛厅",f:"王继才.html",c:0x4A7A8A,img:null},
+    {n:"鲁迅",hall:"呐喊厅",f:"鲁迅.html",c:0x4A4438,img:"images/portrait-23.jpg"},
+    {n:"闻一多",hall:"红烛厅",f:"闻一多.html",c:0x8C3A3A,img:"images/portrait-24.jpg"},
+    {n:"朱自清",hall:"背影厅",f:"朱自清.html",c:0x4C8C6E,img:"images/portrait-25.jpg"},
+    {n:"老舍",hall:"茶馆厅",f:"老舍.html",c:0x5A5A6E,img:"images/portrait-26.jpg"},
+    {n:"吴孟超",hall:"妙手厅",f:"吴孟超.html",c:0xB08C3A,img:"images/portrait-27.jpg"},
+    {n:"林巧稚",hall:"新生厅",f:"林巧稚.html",c:0xB56A7E,img:"images/portrait-28.jpg"},
+    {n:"詹天佑",hall:"京张厅",f:"詹天佑.html",c:0x4C7A6E,img:"images/portrait-29.jpg"}
+  ];
+
+  // —————— 场景 ——————
+  var W = 40, H = 12, D = 26;   // 房间尺寸
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x241d17);
+  scene.fog = new THREE.Fog(0x241d17, 18, 60);
+
+  var camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 200);
+  camera.position.set(0, 5.2, -19);
+  camera.rotation.order = 'YXZ';
+  camera.rotation.y = Math.PI;
+
+  var renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  document.getElementById('stage').appendChild(renderer.domElement);
+
+  // 灯光
+  scene.add(new THREE.AmbientLight(0x3a3226, 1.0));
+  scene.add(new THREE.HemisphereLight(0xfff4e0, 0x241d17, 0.55));
+  function light(x,y,z,color,intensity){
+    var p = new THREE.PointLight(color, intensity, 30, 2);
+    p.position.set(x,y,z);
+    p.castShadow = true;
+    scene.add(p);
+    return p;
+  }
+  var ls = [light(-12,8,-8,0xffd9a0,1.1), light(12,8,8,0xffd9a0,1.1), light(0,8,0,0xffe8c0,0.9)];
+
+  // 地板
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), new THREE.MeshStandardMaterial({color:0x3d2f1f, roughness:0.6}));
+  floor.rotation.x = -Math.PI/2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  // 天花板
+  var ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, D), new THREE.MeshStandardMaterial({color:0xe8dcc0, roughness:0.9}));
+  ceil.rotation.x = Math.PI/2;
+  ceil.position.y = H;
+  scene.add(ceil);
+
+  // 墙体
+  var wallMat = new THREE.MeshStandardMaterial({color:0xe6d9bc, roughness:0.85});
+  function wall(w,h,x,y,z,ry){
+    var m = new THREE.Mesh(new THREE.PlaneGeometry(w,h), wallMat);
+    m.position.set(x,y,z); m.rotation.y = ry; m.receiveShadow = true;
+    scene.add(m); return m;
+  }
+  wall(W, H, 0, H/2, -D/2, 0);
+  wall(W, H, 0, H/2, D/2, Math.PI);
+  wall(D, H, -W/2, H/2, 0, Math.PI/2);
+  wall(D, H, W/2, H/2, 0, -Math.PI/2);
+
+  // 地面金色导引线
+  var edgeMat = new THREE.LineBasicMaterial({color:0xA98A4B});
+  var pts = [new THREE.Vector3(-W/2+0.3,0.02,-D/2+0.3), new THREE.Vector3(W/2-0.3,0.02,-D/2+0.3),
+             new THREE.Vector3(W/2-0.3,0.02,D/2-0.3), new THREE.Vector3(-W/2+0.3,0.02,D/2-0.3),
+             new THREE.Vector3(-W/2+0.3,0.02,-D/2+0.3)];
+  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), edgeMat));
+
+  // —————— 门 ——————
+  var doorGroup = new THREE.Group();
+  var doorMat = new THREE.MeshStandardMaterial({color:0x6b3a24, roughness:0.5});
+  function doorPanel(w,h,hingeX){
+    var g = new THREE.Group();
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(w,h,0.16), doorMat);
+    mesh.position.x = hingeX < 0 ? w/2 : -w/2;
+    mesh.castShadow = true;
+    g.add(mesh);
+    g.position.set(hingeX, 2.2, -D/2 + 0.1);
+    return g;
+  }
+  var doorL = doorPanel(2.4, 4.4, -2.4);
+  var doorR = doorPanel(2.4, 4.4, 2.4);
+  var frameMat = new THREE.MeshStandardMaterial({color:0x8c6a3f});
+  var frameTop = new THREE.Mesh(new THREE.BoxGeometry(5.2,0.5,0.3), frameMat);
+  frameTop.position.set(0, 4.7, -D/2);
+  var frameL = new THREE.Mesh(new THREE.BoxGeometry(0.5,4.7,0.3), frameMat);
+  frameL.position.set(-2.65, 2.35, -D/2);
+  var frameR = new THREE.Mesh(new THREE.BoxGeometry(0.5,4.7,0.3), frameMat);
+  frameR.position.set(2.65, 2.35, -D/2);
+  doorGroup.add(doorL, doorR, frameTop, frameL, frameR);
+  scene.add(doorGroup);
+
+  // —————— 展位 ——————
+  var textureLoader = new THREE.TextureLoader();
+  var exhibits = [];
+  function makeLabel(text, colorHex){
+    var c = document.createElement('canvas'); c.width=512; c.height=140;
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,512,140);
+    ctx.fillStyle = '#' + colorHex.toString(16).padStart(6,'0');
+    ctx.font = 'bold 52px "Songti SC","STSong",serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(text, 256, 70);
+    var t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearFilter; return t;
+  }
+  function makeExhibit(d){
+    var grp = new THREE.Group();
+    var frame = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 2.6), new THREE.MeshStandardMaterial({color:d.c, roughness:0.5}));
+    frame.castShadow = true;
+    grp.add(frame);
+    var portrait = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 2.15), new THREE.MeshStandardMaterial({color:d.c}));
+    portrait.position.z = 0.02;
+    grp.add(portrait);
+    if(d.img){
+      textureLoader.load(d.img, function(tex){
+        portrait.material = new THREE.MeshStandardMaterial({map:tex, roughness:0.6});
+      });
+    }
+    var plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 0.66), new THREE.MeshStandardMaterial({color:0x1d1813, roughness:0.4}));
+    plaque.position.set(0, -1.5, 0.02);
+    grp.add(plaque);
+    var label = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.5), new THREE.MeshBasicMaterial({map:makeLabel(d.n+' · '+d.hall, d.c), transparent:true}));
+    label.position.set(0, -1.5, 0.06);
+    grp.add(label);
+    grp.userData = d;
+    return grp;
+  }
+
+  var idx = 0;
+  var slots = [];
+  for(var i=0;i<8;i++){ slots.push({x:-W/2+0.35, z:-7.6+i*2.17, ry:Math.PI/2}); }
+  for(var i=0;i<8;i++){ slots.push({x:W/2-0.35, z:-7.6+i*2.17, ry:-Math.PI/2}); }
+  for(var i=0;i<7;i++){ slots.push({x:-7.8+i*2.6, z:D/2-0.35, ry:Math.PI}); }
+  for(var i=0;i<7;i++){ slots.push({x:-7.8+i*2.6, z:-D/2+0.35, ry:0}); }
+  EXHIBITS.forEach(function(d){
+    var s = slots[idx++]; if(!s) return;
+    var e = makeExhibit(d);
+    e.position.set(s.x, 3.9, s.z);
+    e.rotation.y = s.ry;
+    scene.add(e);
+    exhibits.push(e);
+  });
+
+  // —————— 交互 ——————
+  var raycaster = new THREE.Raycaster();
+  var mouse = new THREE.Vector2();
+  var yaw = Math.PI, pitch = 0;
+  var keys = {};
+  var entered = false, entering = false;
+  var doorOpen = 0, camT = 0;
+  var hovered = null;
+
+  function onPointerDown(e){
+    var x0 = e.clientX, y0 = e.clientY;
+    function move(ev){
+      var dx = ev.clientX - x0, dy = ev.clientY - y0;
+      yaw -= dx * 0.0032;
+      pitch -= dy * 0.0032;
+      pitch = Math.max(-1.3, Math.min(1.3, pitch));
+      x0 = ev.clientX; y0 = ev.clientY;
+    }
+    function up(ev){
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      var dist = Math.hypot(ev.clientX - e.clientX, ev.clientY - e.clientY);
+      if(dist < 6) onClick(ev);
+    }
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  }
+
+  function onClick(e){
+    mouse.x = (e.clientX/window.innerWidth)*2-1;
+    mouse.y = -(e.clientY/window.innerHeight)*2+1;
+    raycaster.setFromCamera(mouse, camera);
+    var hits = raycaster.intersectObjects(exhibits, true);
+    if(hits.length){
+      var d = hits[0].object.parent.userData;
+      if(d && d.f) location.href = d.f;
+    }
+  }
+
+  function onMove(e){
+    mouse.x = (e.clientX/window.innerWidth)*2-1;
+    mouse.y = -(e.clientY/window.innerHeight)*2+1;
+    raycaster.setFromCamera(mouse, camera);
+    var hits = raycaster.intersectObjects(exhibits, true);
+    var cur = hits.length ? hits[0].object.parent : null;
+    if(cur !== hovered){
+      if(hovered) hovered.scale.setScalar(1);
+      hovered = cur;
+      if(hovered) hovered.scale.setScalar(1.05);
+      renderer.domElement.style.cursor = hovered ? 'pointer' : 'grab';
+    }
+  }
+
+  window.addEventListener('pointerdown', onPointerDown);
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('keydown', function(e){ keys[e.key.toLowerCase()] = true; });
+  window.addEventListener('keyup', function(e){ keys[e.key.toLowerCase()] = false; });
+
+  // 滚轮 / 触控板滑动前进后退
+  window.addEventListener('wheel', function(e){
+    if(!entered) return;
+    var f = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+    camera.position.add(f.multiplyScalar(-e.deltaY * 0.04));
+    camera.position.x = Math.max(-W/2+0.8, Math.min(W/2-0.8, camera.position.x));
+    camera.position.z = Math.max(-D/2+0.8, Math.min(D/2-0.8, camera.position.z));
+  }, {passive:true});
+
+  var autoWalk = false;
+  document.getElementById('walk-btn').addEventListener('click', function(){
+    autoWalk = !autoWalk;
+    this.classList.toggle('on', autoWalk);
+    this.textContent = autoWalk ? '⏹ 停止漫游' : '🚶 自动漫游';
+  });
+
+  document.getElementById('door-btn').addEventListener('click', function(){
+    if(entering) return;
+    entering = true;
+    document.getElementById('door-card').classList.add('hide');
+  });
+
+  // —————— 主循环 ——————
+  var clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt = Math.min(clock.getDelta(), 0.05);
+
+    if(entering){
+      doorOpen = Math.min(1, doorOpen + dt*0.8);
+      doorL.rotation.y = -1.55 * ease(doorOpen);
+      doorR.rotation.y = 1.55 * ease(doorOpen);
+      camT += dt*0.5;
+      camera.position.z = -19 + camT * 11;
+      camera.position.y = 5.2;
+      camera.rotation.y = Math.PI;
+      if(camT >= 1){ entering = false; entered = true; }
+    } else if(entered){
+      var sp = 7.5*dt;
+      var fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+      var right = new THREE.Vector3(-fwd.z, 0, fwd.x);
+      var move = new THREE.Vector3();
+      if(keys['w']||keys['arrowup']) move.add(fwd);
+      if(keys['s']||keys['arrowdown']) move.sub(fwd);
+      if(keys['a']||keys['arrowleft']) move.sub(right);
+      if(keys['d']||keys['arrowright']) move.add(right);
+      if(move.lengthSq()>0){ move.normalize().multiplyScalar(sp); camera.position.add(move); }
+      if(autoWalk){
+        var af = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+        camera.position.add(af.multiplyScalar(sp*0.55));
+        if(Math.abs(camera.position.x) > W/2-1.4 || Math.abs(camera.position.z) > D/2-1.4){ yaw += 0.9; }
+      }
+      camera.position.x = Math.max(-W/2+0.8, Math.min(W/2-0.8, camera.position.x));
+      camera.position.z = Math.max(-D/2+0.8, Math.min(D/2-0.8, camera.position.z));
+      camera.rotation.y = yaw;
+      camera.rotation.x = pitch;
+    }
+
+    ls.forEach(function(l,i){ l.intensity = l.intensity*0.9 + (0.95 + Math.sin(clock.elapsedTime*1.5 + i)*0.15)*0.1; });
+
+    renderer.render(scene, camera);
+  }
+  function ease(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  animate();
+
+  window.addEventListener('resize', function(){
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // —————— 名录面板 ——————
+  var grid = document.getElementById('r-grid');
+  EXHIBITS.forEach(function(d){
+    var a = document.createElement('a');
+    a.href = d.f;
+    var col = '#'+d.c.toString(16).padStart(6,'0');
+    a.innerHTML = '<i style="background:'+col+';color:'+col+'"></i>' + d.n + '<span style="margin-left:auto;color:#CFC6B0;font-size:12px">'+d.hall+'</span>';
+    grid.appendChild(a);
+  });
+  document.getElementById('roster-btn').addEventListener('click', function(){ document.getElementById('roster').classList.add('open'); });
+  document.getElementById('r-close').addEventListener('click', function(){ document.getElementById('roster').classList.remove('open'); });
+  </script>
+</body>
+</html>

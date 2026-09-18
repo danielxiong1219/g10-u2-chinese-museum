@@ -1,0 +1,182 @@
+{
+ "袁隆平": {
+  "portrait": "images/portrait-00.jpg",
+  "bg": "images/bg-00.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/7/77/Yuan_Longping_at_news_conference_%28cropped%29.png?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Blond_and_green_rice_fields.jpg/1920px-Blond_and_green_rice_fields.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "张秉贵": {
+  "portrait": "images/portrait-01.jpg",
+  "bg": "images/bg-01.jpg",
+  "portrait_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/1963-06_1963%E5%B9%B4_%E5%8C%97%E4%BA%AC_%E5%BC%A0%E7%A7%89%E8%B4%B5.jpg/960px-1963-06_1963%E5%B9%B4_%E5%8C%97%E4%BA%AC_%E5%BC%A0%E7%A7%89%E8%B4%B5.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Kid_in_a_Candy_Store_%286062027375%29.jpg/1920px-Kid_in_a_Candy_Store_%286062027375%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "钟扬": {
+  "portrait": null,
+  "bg": "images/bg-02.jpg",
+  "portrait_src": "",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Autumn_on_the_Tibetan_Plateau_%28MODIS_2025-11-18%29.jpg/1920px-Autumn_on_the_Tibetan_Plateau_%28MODIS_2025-11-18%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "高凤林": {
+  "portrait": null,
+  "bg": "images/bg-03.jpg",
+  "portrait_src": "",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Man_Welding_a_Metal_Gate.jpg/1920px-Man_Welding_a_Metal_Gate.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "钱学森": {
+  "portrait": "images/portrait-04.jpg",
+  "bg": "images/bg-04.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/%E6%AD%B8%E5%9C%8B%E5%BE%8C%E7%9A%84%E9%8C%A2%E5%AD%B8%E6%A3%AE.png?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Ares_I-X_launch_08.jpg/1920px-Ares_I-X_launch_08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "邓稼先": {
+  "portrait": "images/portrait-05.jpg",
+  "bg": "images/bg-05.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Deng_Jiaxian_1949.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/00065_sand_collage.jpg/1920px-00065_sand_collage.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "屠呦呦": {
+  "portrait": "images/portrait-06.jpg",
+  "bg": "images/bg-06.jpg",
+  "portrait_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/D810_4987_Tu_Youyou%2C_medicine_%2822945001843%29_%28cropped%29.jpg/960px-D810_4987_Tu_Youyou%2C_medicine_%2822945001843%29_%28cropped%29.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "bg_src": ""
+ },
+ "南仁东": {
+  "portrait": null,
+  "bg": "images/bg-07.jpg",
+  "portrait_src": "",
+  "bg_src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/%22FAST%22_Radio_Telescope_%2819404171033%29.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+ },
+ "华罗庚": {
+  "portrait": "images/portrait-08.jpg",
+  "bg": "images/bg-08.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Hua_Luogeng_1956.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://upload.wikimedia.org/wikipedia/commons/c/c2/CMAP_-_Centre_de_Math%C3%A9matiques_Appliqu%C3%A9es_de_l%27Ecole_polytechnique.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+ },
+ "李四光": {
+  "portrait": "images/portrait-09.jpg",
+  "bg": "images/bg-09.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/2/2c/%E6%9D%8E%E5%9B%9B%E5%85%89%E5%A7%94%E5%91%98%E9%95%BF.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Contorted_Rock_Strata%2C_West_Humboldt_Mountains%5E_-_NARA_-_519587.jpg/1920px-Contorted_Rock_Strata%2C_West_Humboldt_Mountains%5E_-_NARA_-_519587.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "茅以升": {
+  "portrait": "images/portrait-10.jpg",
+  "bg": "images/bg-10.jpg",
+  "portrait_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/%E8%8C%85%E4%BB%A5%E6%98%87%E9%99%A2%E5%A3%AB.jpg/960px-%E8%8C%85%E4%BB%A5%E6%98%87%E9%99%A2%E5%A3%AB.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Hell_Gate_Bridge_%2860197p%29.jpg/1920px-Hell_Gate_Bridge_%2860197p%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "于敏": {
+  "portrait": "images/portrait-11.jpg",
+  "bg": "images/bg-11.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/d/dc/%E4%BA%8E%E6%95%8F%E6%97%A9%E5%B9%B4%E7%85%A7.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Institute_of_nuclear_and_particle_physics_00048_REP_SDR-62_%280659%29.jpg/1920px-Institute_of_nuclear_and_particle_physics_00048_REP_SDR-62_%280659%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "孙家栋": {
+  "portrait": "images/portrait-12.jpg",
+  "bg": "images/bg-12.jpg",
+  "portrait_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/%E5%AD%99%E5%AE%B6%E6%A0%8B%E9%99%A2%E5%A3%AB.jpg/960px-%E5%AD%99%E5%AE%B6%E6%A0%8B%E9%99%A2%E5%A3%AB.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/A_trio_of_CubeSats_is_ejected_into_Earth_orbit_from_a_small_satellite_orbital_deployer_%28iss072e352045%29.jpg/1920px-A_trio_of_CubeSats_is_ejected_into_Earth_orbit_from_a_small_satellite_orbital_deployer_%28iss072e352045%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "王进喜": {
+  "portrait": "images/portrait-13.jpg",
+  "bg": "images/bg-13.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/4/48/1966-07_%E5%A4%A7%E5%BA%86%E9%93%81%E4%BA%BA%E7%8E%8B%E8%BF%9B%E5%96%9C.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Sunniland_Oil_Field_preserved_pumpjack.jpg/1920px-Sunniland_Oil_Field_preserved_pumpjack.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "时传祥": {
+  "portrait": "images/portrait-14.jpg",
+  "bg": "images/bg-14.jpg",
+  "portrait_src": "",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/04_22_2022_McKibbinSt_street_clean_tools_Earth_Day_Brooklyn_NYC.jpg/1920px-04_22_2022_McKibbinSt_street_clean_tools_Earth_Day_Brooklyn_NYC.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "许振超": {
+  "portrait": null,
+  "bg": "images/bg-15.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "焦裕禄": {
+  "portrait": "images/portrait-16.jpg",
+  "bg": "images/bg-16.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "雷锋": {
+  "portrait": "images/portrait-17.jpg",
+  "bg": "images/bg-17.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Lei_Feng_13.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": ""
+ },
+ "张桂梅": {
+  "portrait": "images/portrait-18.jpg",
+  "bg": "images/bg-18.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "黄文秀": {
+  "portrait": "images/portrait-19.jpg",
+  "bg": "images/bg-19.jpg",
+  "portrait_src": "",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Harvest_Festival_in_countryside_-_Door_doll_for_praying_and_peace.jpg/1280px-Harvest_Festival_in_countryside_-_Door_doll_for_praying_and_peace.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "黄大年": {
+  "portrait": "images/portrait-20.jpg",
+  "bg": "images/bg-20.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "申纪兰": {
+  "portrait": "images/portrait-21.jpg",
+  "bg": "images/bg-21.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "王继才": {
+  "portrait": null,
+  "bg": "images/bg-22.jpg",
+  "portrait_src": "",
+  "bg_src": ""
+ },
+ "鲁迅": {
+  "portrait": "images/portrait-23.jpg",
+  "bg": "images/bg-23.jpg",
+  "portrait_src": "",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Anhui_Four_Treasures_of_the_Study_%289974352754%29.jpg/1920px-Anhui_Four_Treasures_of_the_Study_%289974352754%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "闻一多": {
+  "portrait": "images/portrait-24.jpg",
+  "bg": "images/bg-24.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/0/04/%E9%97%BB%E4%B8%80%E5%A4%9A01.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/A_Red_Candle%E2%80%99s_flame.jpg/1920px-A_Red_Candle%E2%80%99s_flame.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "朱自清": {
+  "portrait": "images/portrait-25.jpg",
+  "bg": "images/bg-25.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/2/26/%E6%9C%B1%E8%87%AA%E6%B8%85%E8%82%96%E5%83%8F.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/CBD-2007-D034_Lotus_pond_in_Cambodia.jpg/1920px-CBD-2007-D034_Lotus_pond_in_Cambodia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "老舍": {
+  "portrait": "images/portrait-26.jpg",
+  "bg": "images/bg-26.jpg",
+  "portrait_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Standard_compressed_lao-she.jpg/960px-Standard_compressed_lao-she.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Beijing_Xicheng_IMG_5932_Ya%27er_Hutong.jpg/1920px-Beijing_Xicheng_IMG_5932_Ya%27er_Hutong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "吴孟超": {
+  "portrait": "images/portrait-27.jpg",
+  "bg": "images/bg-27.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/7/75/Wu_Mengchao.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Breast_Surgery_Procedure_in_Modern_Operating_Room.jpg/1920px-Breast_Surgery_Procedure_in_Modern_Operating_Room.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "林巧稚": {
+  "portrait": "images/portrait-28.jpg",
+  "bg": "images/bg-28.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/2/2a/%E6%9E%97%E5%B7%A7%E9%9B%85.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/075_White_rhinoceros_mother_and_her_newborn_baby_in_the_Kalahari_Desert_of_Namibia_Photo_by_Giles_Laurent.jpg/1920px-075_White_rhinoceros_mother_and_her_newborn_baby_in_the_Kalahari_Desert_of_Namibia_Photo_by_Giles_Laurent.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+ },
+ "詹天佑": {
+  "portrait": "images/portrait-29.jpg",
+  "bg": "images/bg-29.jpg",
+  "portrait_src": "https://upload.wikimedia.org/wikipedia/commons/8/81/1918%E5%B9%B4%E8%A9%B9%E5%A4%A9%E4%BD%91.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "bg_src": "https://upload.wikimedia.org/wikipedia/commons/2/2b/NMR_up_train_at_Kateri_Road_05-02-28_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+ }
+}
