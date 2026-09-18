@@ -246,7 +246,14 @@
   guideLine([new THREE.Vector3(0,0,-12), new THREE.Vector3(0,0,-6), new THREE.Vector3(0,0,4), new THREE.Vector3(0,0,12)]);
 
   // ————— 展位 —————
-  var texLoader=new THREE.TextureLoader();
+  var texLoader=new THREE.TextureLoader(); texLoader.crossOrigin='';
+  // 用原生 Image 加载（file:// 下不触发 CORS，双击可离线打开）
+  function loadTex(src, cb){
+    var img=new Image();
+    img.onload=function(){ var t=new THREE.Texture(img); t.needsUpdate=true; t.minFilter=THREE.LinearFilter; cb(t,img); };
+    img.onerror=function(){ cb(null,null); };
+    img.src=src;
+  }
   var totalLoad=0, loadedCount=0;
   EXHIBITS.forEach(function(d){ if(d.img) totalLoad++; });
   function onLoad(){ loadedCount++; var p=Math.min(100, Math.round(loadedCount/totalLoad*100)); document.getElementById('load-bar').style.width=p+'%'; if(p>=100) setTimeout(hideLoading,400); }
@@ -272,7 +279,7 @@
     g.fillText(d.n.charAt(0), 128, 160);
     var t=new THREE.CanvasTexture(c); t.minFilter=THREE.LinearFilter;
     portraitMesh.material=new THREE.MeshStandardMaterial({map:t,roughness:0.55});
-    if(d.img){ texLoader.load(d.img, function(tex){ onLoad(); var iw=tex.image.width||1, ih=tex.image.height||1, a=iw/ih, fa=1.5/2.0; var sx=a>fa?1:a/fa, sy=a>fa?fa/a:1; portraitMesh.scale.set(sx,sy,1); portraitMesh.material=new THREE.MeshStandardMaterial({map:tex,roughness:0.5}); }); }
+    if(d.img){ loadTex(d.img, function(tex){ if(!tex) return; onLoad(); var iw=tex.image.width||1, ih=tex.image.height||1, a=iw/ih, fa=1.5/2.0; var sx=a>fa?1:a/fa, sy=a>fa?fa/a:1; portraitMesh.scale.set(sx,sy,1); portraitMesh.material=new THREE.MeshStandardMaterial({map:tex,roughness:0.5}); }); }
   }
   function makeExhibit(d){
     var grp=new THREE.Group();
@@ -345,7 +352,7 @@
     disc.position.y=1.05; g.add(disc);
     var hp=new THREE.Mesh(new THREE.PlaneGeometry(1.4,1.8), new THREE.MeshBasicMaterial({color:d.c,transparent:true,opacity:0.85}));
     hp.position.y=2.2; g.add(hp);
-    if(d.img){ texLoader.load(d.img, function(tex){ onLoad(); hp.material=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0.9}); }); }
+    if(d.img){ loadTex(d.img, function(tex){ if(!tex) return; onLoad(); hp.material=new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:0.9}); }); }
     var ring=new THREE.Mesh(new THREE.TorusGeometry(0.8,0.05,8,32), new THREE.MeshBasicMaterial({color:d.c}));
     ring.rotation.x=Math.PI/2; ring.position.y=0.05; g.add(ring);
     g.position.set(x,0,z); g.userData=d; scene.add(g); holoGroup.push({g:g,hp:hp,d:d});
@@ -534,7 +541,9 @@
 
   // 预加载完成兜底
   if(totalLoad===0) setTimeout(hideLoading,600);
-  setTimeout(hideLoading, 6000); // 超时强制显示
+  setTimeout(hideLoading, 4000); // 超时强制显示
+  window.addEventListener('pointerdown', hideLoading, {once:true});
+  window.addEventListener('keydown', hideLoading, {once:true});
   </script>
 </body>
 </html>

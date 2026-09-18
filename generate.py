@@ -237,12 +237,15 @@ EXTRA_JS = """<script>
   var portrait=new THREE.Mesh(new THREE.PlaneGeometry(2.5,3.3),new THREE.MeshStandardMaterial({color:color,roughness:0.5}));
   grp.add(portrait);
   if(img){
-    new THREE.TextureLoader().load(img,function(t){
-      var iw=t.image.width||1, ih=t.image.height||1, a=iw/ih, fa=2.5/3.3;
+    var im=new Image();
+    im.onload=function(){
+      var t=new THREE.Texture(im); t.needsUpdate=true; t.minFilter=THREE.LinearFilter;
+      var iw=im.width||1, ih=im.height||1, a=iw/ih, fa=2.5/3.3;
       var sx=a>fa?1:a/fa, sy=a>fa?fa/a:1;
       portrait.scale.set(sx,sy,1);
       portrait.material=new THREE.MeshStandardMaterial({map:t,roughness:0.55});
-    });
+    };
+    im.src=img;
   }
   var cv=document.createElement('canvas'); cv.width=512; cv.height=140;
   var cx=cv.getContext('2d'); cx.clearRect(0,0,512,140);
